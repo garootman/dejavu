@@ -1,9 +1,10 @@
 {
     "database": {
         "host": "127.0.0.1",
-        "user": "root",
-        "password": "rootpass",
+        "port": 22432,
+        "user": "postgres",
+        "password": "postgres",
         "database": "dejavu"
     },
-    "database_type": "mysql"
+    "database_type": "postgres"
 }
