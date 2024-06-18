@@ -1,6 +1,5 @@
 import numpy as np
 import pyaudio
-
 from dejavu.base_classes.base_recognizer import BaseRecognizer
 
 
@@ -20,9 +19,12 @@ class MicrophoneRecognizer(BaseRecognizer):
         self.samplerate = MicrophoneRecognizer.default_samplerate
         self.recorded = False
 
-    def start_recording(self, channels=default_channels,
-                        samplerate=default_samplerate,
-                        chunksize=default_chunksize):
+    def start_recording(
+        self,
+        channels=default_channels,
+        samplerate=default_samplerate,
+        chunksize=default_chunksize,
+    ):
         print("* start recording")
         self.chunksize = chunksize
         self.channels = channels
@@ -49,7 +51,7 @@ class MicrophoneRecognizer(BaseRecognizer):
         nums = np.fromstring(data, np.int16)
         # print(nums)
         for c in range(self.channels):
-            self.data[c].extend(nums[c::self.channels])
+            self.data[c].extend(nums[c :: self.channels])
 
     def stop_recording(self):
         print("* done recording")

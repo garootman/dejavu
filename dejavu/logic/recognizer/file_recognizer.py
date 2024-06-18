@@ -3,8 +3,13 @@ from typing import Dict
 
 import dejavu.logic.decoder as decoder
 from dejavu.base_classes.base_recognizer import BaseRecognizer
-from dejavu.config.settings import (ALIGN_TIME, FINGERPRINT_TIME, QUERY_TIME,
-                                    RESULTS, TOTAL_TIME)
+from dejavu.config.settings import (
+    ALIGN_TIME,
+    FINGERPRINT_TIME,
+    QUERY_TIME,
+    RESULTS,
+    TOTAL_TIME,
+)
 
 
 class FileRecognizer(BaseRecognizer):
@@ -23,7 +28,7 @@ class FileRecognizer(BaseRecognizer):
             FINGERPRINT_TIME: fingerprint_time,
             QUERY_TIME: query_time,
             ALIGN_TIME: align_time,
-            RESULTS: matches
+            RESULTS: matches,
         }
 
         return results

@@ -4,14 +4,13 @@ from hashlib import sha1
 from typing import List, Tuple
 
 import numpy as np
+from dejavu.third_party import wavio
 from pydub import AudioSegment
 from pydub.utils import audioop
 
-from dejavu.third_party import wavio
-
 
 def unique_hash(file_path: str, block_size: int = 2**20) -> str:
-    """ Small function to generate a hash to uniquely generate
+    """Small function to generate a hash to uniquely generate
     a file. Inspired by MD5 version here:
     http://stackoverflow.com/a/1131255/712997
 
@@ -70,20 +69,20 @@ def read(file_name: str, limit: int = None) -> Tuple[List[List[int]], int, str]:
         audiofile = AudioSegment.from_file(file_name)
 
         if limit:
-            audiofile = audiofile[:limit * 1000]
+            audiofile = audiofile[: limit * 1000]
 
         data = np.fromstring(audiofile.raw_data, np.int16)
 
         channels = []
         for chn in range(audiofile.channels):
-            channels.append(data[chn::audiofile.channels])
+            channels.append(data[chn :: audiofile.channels])
 
         audiofile.frame_rate
     except audioop.error:
         _, _, audiofile = wavio.readwav(file_name)
 
         if limit:
-            audiofile = audiofile[:limit * 1000]
+            audiofile = audiofile[: limit * 1000]
 
         audiofile = audiofile.T
         audiofile = audiofile.astype(np.int16)

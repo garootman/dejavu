@@ -2,50 +2,50 @@
 
 # DEJAVU JSON RESPONSE
 SONG_ID = "song_id"
-SONG_NAME = 'song_name'
-RESULTS = 'results'
+SONG_NAME = "song_name"
+RESULTS = "results"
 
-HASHES_MATCHED = 'hashes_matched_in_input'
+HASHES_MATCHED = "hashes_matched_in_input"
 
 # Hashes fingerprinted in the db.
-FINGERPRINTED_HASHES = 'fingerprinted_hashes_in_db'
+FINGERPRINTED_HASHES = "fingerprinted_hashes_in_db"
 # Percentage regarding hashes matched vs hashes fingerprinted in the db.
-FINGERPRINTED_CONFIDENCE = 'fingerprinted_confidence'
+FINGERPRINTED_CONFIDENCE = "fingerprinted_confidence"
 
 # Hashes generated from the input.
-INPUT_HASHES = 'input_total_hashes'
+INPUT_HASHES = "input_total_hashes"
 # Percentage regarding hashes matched vs hashes from the input.
-INPUT_CONFIDENCE = 'input_confidence'
+INPUT_CONFIDENCE = "input_confidence"
 
-TOTAL_TIME = 'total_time'
-FINGERPRINT_TIME = 'fingerprint_time'
-QUERY_TIME = 'query_time'
-ALIGN_TIME = 'align_time'
-OFFSET = 'offset'
-OFFSET_SECS = 'offset_seconds'
+TOTAL_TIME = "total_time"
+FINGERPRINT_TIME = "fingerprint_time"
+QUERY_TIME = "query_time"
+ALIGN_TIME = "align_time"
+OFFSET = "offset"
+OFFSET_SECS = "offset_seconds"
 
 # DATABASE CLASS INSTANCES:
 DATABASES = {
-    'mysql': ("dejavu.database_handler.mysql_database", "MySQLDatabase"),
-    'postgres': ("dejavu.database_handler.postgres_database", "PostgreSQLDatabase")
+    "mysql": ("dejavu.database_handler.mysql_database", "MySQLDatabase"),
+    "postgres": ("dejavu.database_handler.postgres_database", "PostgreSQLDatabase"),
 }
 
 # TABLE SONGS
 SONGS_TABLENAME = "songs"
 
 # SONGS FIELDS
-FIELD_SONG_ID = 'song_id'
-FIELD_SONGNAME = 'song_name'
+FIELD_SONG_ID = "song_id"
+FIELD_SONGNAME = "song_name"
 FIELD_FINGERPRINTED = "fingerprinted"
-FIELD_FILE_SHA1 = 'file_sha1'
-FIELD_TOTAL_HASHES = 'total_hashes'
+FIELD_FILE_SHA1 = "file_sha1"
+FIELD_TOTAL_HASHES = "total_hashes"
 
 # TABLE FINGERPRINTS
 FINGERPRINTS_TABLENAME = "fingerprints"
 
 # FINGERPRINTS FIELDS
-FIELD_HASH = 'hash'
-FIELD_OFFSET = 'offset'
+FIELD_HASH = "hash"
+FIELD_OFFSET = "offset"
 
 # FINGERPRINTS CONFIG:
 # This is used as connectivity parameter for scipy.generate_binary_structure function. This parameter

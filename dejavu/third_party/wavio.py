@@ -48,8 +48,9 @@ def _wav2array(nchannels, sampwidth, data):
     """data must be the string containing the bytes from the wav file."""
     num_samples, remainder = divmod(len(data), sampwidth * nchannels)
     if remainder > 0:
-        raise ValueError('The length of data is not a multiple of '
-                         'sampwidth * num_channels.')
+        raise ValueError(
+            "The length of data is not a multiple of " "sampwidth * num_channels."
+        )
     if sampwidth > 4:
         raise ValueError("sampwidth must not be greater than 4.")
 
@@ -57,12 +58,12 @@ def _wav2array(nchannels, sampwidth, data):
         a = _np.empty((num_samples, nchannels, 4), dtype=_np.uint8)
         raw_bytes = _np.frombuffer(data, dtype=_np.uint8)
         a[:, :, :sampwidth] = raw_bytes.reshape(-1, nchannels, sampwidth)
-        a[:, :, sampwidth:] = (a[:, :, sampwidth - 1:sampwidth] >> 7) * 255
-        result = a.view('<i4').reshape(a.shape[:-1])
+        a[:, :, sampwidth:] = (a[:, :, sampwidth - 1 : sampwidth] >> 7) * 255
+        result = a.view("<i4").reshape(a.shape[:-1])
     else:
         # 8 bit samples are stored as unsigned ints; others as signed ints.
-        dt_char = 'u' if sampwidth == 1 else 'i'
-        a = _np.frombuffer(data, dtype=f'<{dt_char}{sampwidth}')
+        dt_char = "u" if sampwidth == 1 else "i"
+        a = _np.frombuffer(data, dtype=f"<{dt_char}{sampwidth}")
         result = a.reshape(-1, nchannels)
     return result
 
@@ -91,7 +92,7 @@ def _array2wav(a, sampwidth):
     else:
         # Make sure the array is little-endian, and then convert using
         # tostring()
-        a = a.astype('<' + a.dtype.str[1:], copy=False)
+        a = a.astype("<" + a.dtype.str[1:], copy=False)
         wavdata = a.tostring()
     return wavdata
 
@@ -114,8 +115,10 @@ class Wav(object):
         self.sampwidth = sampwidth
 
     def __repr__(self):
-        s = (f"Wav(data.shape={self.data.shape}, data.dtype={self.data.dtype}, "
-             f"rate={self.rate}, sampwidth={self.sampwidth})")
+        s = (
+            f"Wav(data.shape={self.data.shape}, data.dtype={self.data.dtype}, "
+            f"rate={self.rate}, sampwidth={self.sampwidth})"
+        )
         return s
 
 
@@ -165,14 +168,13 @@ def read(file):
     return w
 
 
-_sampwidth_dtypes = {1: _np.uint8,
-                     2: _np.int16,
-                     3: _np.int32,
-                     4: _np.int32}
-_sampwidth_ranges = {1: (0, 256),
-                     2: (-2**15, 2**15),
-                     3: (-2**23, 2**23),
-                     4: (-2**31, 2**31)}
+_sampwidth_dtypes = {1: _np.uint8, 2: _np.int16, 3: _np.int32, 4: _np.int32}
+_sampwidth_ranges = {
+    1: (0, 256),
+    2: (-(2**15), 2**15),
+    3: (-(2**23), 2**23),
+    4: (-(2**31), 2**31),
+}
 
 
 def _scale_to_sampwidth(data, sampwidth, vmin, vmax):
@@ -189,8 +191,9 @@ def _scale_to_sampwidth(data, sampwidth, vmin, vmax):
         if outmin != vmin or outmax != vmax:
             vmin = float(vmin)
             vmax = float(vmax)
-            data = (float(outmax - outmin) * (data - vmin) /
-                    (vmax - vmin)).astype(_np.int64) + outmin
+            data = (float(outmax - outmin) * (data - vmin) / (vmax - vmin)).astype(
+                _np.int64
+            ) + outmin
             data[data == outmax] = outmax - 1
         data = data.astype(dt)
 
@@ -292,17 +295,19 @@ def write(file, data, rate, scale=None, sampwidth=None):
 
     if sampwidth is None:
         if not _np.issubdtype(data.dtype, _np.integer) or data.itemsize > 4:
-            raise ValueError('when data.dtype is not an 8-, 16-, or 32-bit integer type, sampwidth must be specified.')
+            raise ValueError(
+                "when data.dtype is not an 8-, 16-, or 32-bit integer type, sampwidth must be specified."
+            )
         sampwidth = data.itemsize
     else:
         if sampwidth not in [1, 2, 3, 4]:
-            raise ValueError('sampwidth must be 1, 2, 3 or 4.')
+            raise ValueError("sampwidth must be 1, 2, 3 or 4.")
 
     outdtype = _sampwidth_dtypes[sampwidth]
     outmin, outmax = _sampwidth_ranges[sampwidth]
 
     if scale == "none":
-        data = data.clip(outmin, outmax-1).astype(outdtype)
+        data = data.clip(outmin, outmax - 1).astype(outdtype)
     elif scale == "dtype-limits":
         if not _np.issubdtype(data.dtype, _np.integer):
             raise ValueError("scale cannot be 'dtype-limits' with non-integer data.")
@@ -349,7 +354,7 @@ def write(file, data, rate, scale=None, sampwidth=None):
 
     wavdata = _array2wav(data, sampwidth)
 
-    w = _wave.open(file, 'wb')
+    w = _wave.open(file, "wb")
     w.setnchannels(data.shape[1])
     w.setsampwidth(sampwidth)
     w.setframerate(rate)

@@ -154,7 +154,9 @@ class CommonDatabase(BaseDatabase, metaclass=abc.ABCMeta):
         """
         return self.query(None)
 
-    def insert_hashes(self, song_id: int, hashes: List[Tuple[str, int]], batch_size: int = 1000) -> None:
+    def insert_hashes(
+        self, song_id: int, hashes: List[Tuple[str, int]], batch_size: int = 1000
+    ) -> None:
         """
         Insert a multitude of fingerprints.
 
@@ -168,10 +170,13 @@ class CommonDatabase(BaseDatabase, metaclass=abc.ABCMeta):
 
         with self.cursor() as cur:
             for index in range(0, len(hashes), batch_size):
-                cur.executemany(self.INSERT_FINGERPRINT, values[index: index + batch_size])
+                cur.executemany(
+                    self.INSERT_FINGERPRINT, values[index : index + batch_size]
+                )
 
-    def return_matches(self, hashes: List[Tuple[str, int]],
-                       batch_size: int = 1000) -> Tuple[List[Tuple[int, int]], Dict[int, int]]:
+    def return_matches(
+        self, hashes: List[Tuple[str, int]], batch_size: int = 1000
+    ) -> Tuple[List[Tuple[int, int]], Dict[int, int]]:
         """
         Searches the database for pairs of (hash, offset) values.
 
@@ -202,9 +207,11 @@ class CommonDatabase(BaseDatabase, metaclass=abc.ABCMeta):
         with self.cursor() as cur:
             for index in range(0, len(values), batch_size):
                 # Create our IN part of the query
-                query = self.SELECT_MULTIPLE % ', '.join([self.IN_MATCH] * len(values[index: index + batch_size]))
+                query = self.SELECT_MULTIPLE % ", ".join(
+                    [self.IN_MATCH] * len(values[index : index + batch_size])
+                )
 
-                cur.execute(query, values[index: index + batch_size])
+                cur.execute(query, values[index : index + batch_size])
 
                 for hsh, sid, offset in cur:
                     if sid not in dedup_hashes.keys():
@@ -227,6 +234,8 @@ class CommonDatabase(BaseDatabase, metaclass=abc.ABCMeta):
         with self.cursor() as cur:
             for index in range(0, len(song_ids), batch_size):
                 # Create our IN part of the query
-                query = self.DELETE_SONGS % ', '.join(['%s'] * len(song_ids[index: index + batch_size]))
+                query = self.DELETE_SONGS % ", ".join(
+                    ["%s"] * len(song_ids[index : index + batch_size])
+                )
 
-                cur.execute(query, song_ids[index: index + batch_size])
+                cur.execute(query, song_ids[index : index + batch_size])

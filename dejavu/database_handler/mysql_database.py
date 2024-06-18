@@ -1,13 +1,19 @@
 import queue
 
 import mysql.connector
-from mysql.connector.errors import DatabaseError
-
 from dejavu.base_classes.common_database import CommonDatabase
-from dejavu.config.settings import (FIELD_FILE_SHA1, FIELD_FINGERPRINTED,
-                                    FIELD_HASH, FIELD_OFFSET, FIELD_SONG_ID,
-                                    FIELD_SONGNAME, FIELD_TOTAL_HASHES,
-                                    FINGERPRINTS_TABLENAME, SONGS_TABLENAME)
+from dejavu.config.settings import (
+    FIELD_FILE_SHA1,
+    FIELD_FINGERPRINTED,
+    FIELD_HASH,
+    FIELD_OFFSET,
+    FIELD_SONG_ID,
+    FIELD_SONGNAME,
+    FIELD_TOTAL_HASHES,
+    FINGERPRINTS_TABLENAME,
+    SONGS_TABLENAME,
+)
+from mysql.connector.errors import DatabaseError
 
 
 class MySQLDatabase(CommonDatabase):
@@ -70,7 +76,9 @@ class MySQLDatabase(CommonDatabase):
         WHERE `{FIELD_HASH}` IN (%s);
     """
 
-    SELECT_ALL = f"SELECT `{FIELD_SONG_ID}`, `{FIELD_OFFSET}` FROM `{FINGERPRINTS_TABLENAME}`;"
+    SELECT_ALL = (
+        f"SELECT `{FIELD_SONG_ID}`, `{FIELD_OFFSET}` FROM `{FINGERPRINTS_TABLENAME}`;"
+    )
 
     SELECT_SONG = f"""
         SELECT `{FIELD_SONGNAME}`, HEX(`{FIELD_FILE_SHA1}`) AS `{FIELD_FILE_SHA1}`, `{FIELD_TOTAL_HASHES}`
@@ -143,10 +151,10 @@ class MySQLDatabase(CommonDatabase):
             return cur.lastrowid
 
     def __getstate__(self):
-        return self._options,
+        return (self._options,)
 
     def __setstate__(self, state):
-        self._options, = state
+        (self._options,) = state
         self.cursor = cursor_factory(**self._options)
 
 
@@ -154,6 +162,7 @@ def cursor_factory(**factory_options):
     def cursor(**options):
         options.update(factory_options)
         return Cursor(**options)
+
     return cursor
 
 
@@ -165,6 +174,7 @@ class Cursor(object):
         cur.execute(query)
         ...
     """
+
     def __init__(self, dictionary=False, **options):
         super().__init__()
 

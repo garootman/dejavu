@@ -139,7 +139,9 @@ class BaseDatabase(object, metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def insert_hashes(self, song_id: int, hashes: List[Tuple[str, int]], batch_size: int = 1000) -> None:
+    def insert_hashes(
+        self, song_id: int, hashes: List[Tuple[str, int]], batch_size: int = 1000
+    ) -> None:
         """
         Insert a multitude of fingerprints.
 
@@ -151,8 +153,9 @@ class BaseDatabase(object, metaclass=abc.ABCMeta):
         """
 
     @abc.abstractmethod
-    def return_matches(self, hashes: List[Tuple[str, int]], batch_size: int = 1000) \
-            -> Tuple[List[Tuple[int, int]], Dict[int, int]]:
+    def return_matches(
+        self, hashes: List[Tuple[str, int]], batch_size: int = 1000
+    ) -> Tuple[List[Tuple[int, int]], Dict[int, int]]:
         """
         Searches the database for pairs of (hash, offset) values.
 

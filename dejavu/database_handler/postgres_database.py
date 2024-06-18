@@ -1,13 +1,19 @@
 import queue
 
 import psycopg2
-from psycopg2.extras import DictCursor
-
 from dejavu.base_classes.common_database import CommonDatabase
-from dejavu.config.settings import (FIELD_FILE_SHA1, FIELD_FINGERPRINTED,
-                                    FIELD_HASH, FIELD_OFFSET, FIELD_SONG_ID,
-                                    FIELD_SONGNAME, FIELD_TOTAL_HASHES,
-                                    FINGERPRINTS_TABLENAME, SONGS_TABLENAME)
+from dejavu.config.settings import (
+    FIELD_FILE_SHA1,
+    FIELD_FINGERPRINTED,
+    FIELD_HASH,
+    FIELD_OFFSET,
+    FIELD_SONG_ID,
+    FIELD_SONGNAME,
+    FIELD_TOTAL_HASHES,
+    FINGERPRINTS_TABLENAME,
+    SONGS_TABLENAME,
+)
+from psycopg2.extras import DictCursor
 
 
 class PostgreSQLDatabase(CommonDatabase):
@@ -77,7 +83,9 @@ class PostgreSQLDatabase(CommonDatabase):
         WHERE "{FIELD_HASH}" IN (%s);
     """
 
-    SELECT_ALL = f'SELECT "{FIELD_SONG_ID}", "{FIELD_OFFSET}" FROM "{FINGERPRINTS_TABLENAME}";'
+    SELECT_ALL = (
+        f'SELECT "{FIELD_SONG_ID}", "{FIELD_OFFSET}" FROM "{FINGERPRINTS_TABLENAME}";'
+    )
 
     SELECT_SONG = f"""
         SELECT
@@ -108,8 +116,8 @@ class PostgreSQLDatabase(CommonDatabase):
     """
 
     # DROPS
-    DROP_FINGERPRINTS = F'DROP TABLE IF EXISTS "{FINGERPRINTS_TABLENAME}";'
-    DROP_SONGS = F'DROP TABLE IF EXISTS "{SONGS_TABLENAME}";'
+    DROP_FINGERPRINTS = f'DROP TABLE IF EXISTS "{FINGERPRINTS_TABLENAME}";'
+    DROP_SONGS = f'DROP TABLE IF EXISTS "{SONGS_TABLENAME}";'
 
     # UPDATE
     UPDATE_SONG_FINGERPRINTED = f"""
@@ -156,10 +164,10 @@ class PostgreSQLDatabase(CommonDatabase):
             return cur.fetchone()[0]
 
     def __getstate__(self):
-        return self._options,
+        return (self._options,)
 
     def __setstate__(self, state):
-        self._options, = state
+        (self._options,) = state
         self.cursor = cursor_factory(**self._options)
 
 
@@ -167,6 +175,7 @@ def cursor_factory(**factory_options):
     def cursor(**options):
         options.update(factory_options)
         return Cursor(**options)
+
     return cursor
 
 
@@ -178,6 +187,7 @@ class Cursor(object):
         cur.execute(query)
         ...
     """
+
     def __init__(self, dictionary=False, **options):
         super().__init__()
 
